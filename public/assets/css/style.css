@@ -41283,44 +41283,48 @@ footer {
 /*# sourceMappingURL=style.css.map */
 
 /*drawer menu*/
-.category-drawer-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: none;
+.head-cate-menu {
+    position: relative;
 }
 
 .category-drawer {
     position: fixed;
     top: 0;
-    left: -100%;
+    left: -370px;
     width: 320px;
-    height: 100%;
+    height: 100vh;
     background-color: #fff;
     z-index: 1000;
-    overflow-y: auto;
     transition: all 0.3s ease;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.17), 4px 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
 .category-drawer.open {
     left: 0;
 }
 
-.category-drawer-overlay {
-    display: block;
+/* Main Content Push Effect */
+.main-content {
+    transition: margin-left 0.3s ease;
+    margin-left: 0;
 }
 
+.main-content.push {
+    margin-left: 320px;
+}
+
+/* Drawer Header Styles */
 .drawer-header {
     padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
 }
 
 .drawer-header h3 {
@@ -41337,18 +41341,12 @@ footer {
     color: #333;
 }
 
+/* Category Menu Items */
 .category-menu-items {
     padding: 15px;
 }
 
-/* Responsive adjustments */
-@media (min-width: 992px) {
-    .category-drawer {
-        width: 350px;
-    }
-}
-
-/* Existing menu item styles (keep these from your original CSS) */
+/* Mega Menu Styles */
 .has-mega-menu .mega-menu {
     padding: 15px;
     background: #f9f9f9;
@@ -41369,10 +41367,42 @@ footer {
     display: block;
     color: #333;
 }
+.header-nav.w3menu .head-cate-menu .nav > li .mega-menu{
+    position: fixed;
+    top: 39px;
+    left: 356px !important;
+}
 
 .badge {
     margin-left: 5px;
     font-size: 10px;
     padding: 3px 6px;
+}
+
+/* Hamburger Menu Icon */
+.category-menu {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 20px;
+    height: 16px;
+}
+
+.category-menu span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+}
+
+/* Responsive adjustments */
+@media (min-width: 992px) {
+    .category-drawer {
+        width: 350px;
+    }
+    
+    .main-content.push {
+        margin-left: 350px;
+    }
 }
 /*drawer menu*/

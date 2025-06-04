@@ -123,18 +123,8 @@ export default function Header() {
                                     </span>
                                 </a>
 
-                                {/* Drawer Overlay */}
-                                {isCategoryOpen && (
-                                    <div
-                                        className="category-drawer-overlay"
-                                        onClick={toggleCategoryMenu}
-                                    />
-                                )}
-
                                 {/* Drawer Menu */}
-                                <div
-                                    className={`category-drawer ${isCategoryOpen ? 'open' : ''}`}
-                                >
+                                <div className={`category-drawer ${isCategoryOpen ? 'open' : ''}`}>
                                     <div className="drawer-header">
                                         <h3>Browse Categories</h3>
                                         <button
