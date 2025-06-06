@@ -31,7 +31,6 @@ export default function RootLayout({ children }) {
         </div>
         <script src="/assets/js/jquery.min.js" defer></script>
         <script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
-        
       </body>
     </html>
   );

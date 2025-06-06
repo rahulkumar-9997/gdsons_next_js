@@ -1,15 +1,40 @@
 "use client";
-import React, { useState } from 'react';
+import Link from 'next/link';
+import React, { useState, useEffect, useRef } from 'react';
 export default function Header() {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [activeSubmenu, setActiveSubmenu] = useState(null);
+    const drawerRef = useRef(null);
+    const categoryBtnRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (drawerRef.current && !drawerRef.current.contains(event.target) &&
+                categoryBtnRef.current && !categoryBtnRef.current.contains(event.target)) {
+                setIsCategoryOpen(false);
+                setActiveSubmenu(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const toggleCategoryMenu = () => {
         setIsCategoryOpen(!isCategoryOpen);
+        if (isCategoryOpen) {
+            setActiveSubmenu(null);
+        }
     };
 
     const toggleSubmenu = (index) => {
         setActiveSubmenu(activeSubmenu === index ? null : index);
+    };
+    const closeAllMenus = () => {
+        setIsCategoryOpen(false);
+        setActiveSubmenu(null);
     };
 
     return (
@@ -19,9 +44,9 @@ export default function Header() {
                 <div className="container clearfix">
                     {/* Website Logo */}
                     <div className="logo-header logo-dark">
-                        <a href="index.html">
+                        <Link href="/">
                             <img src="/assets/images/logo.svg" alt="logo" />
-                        </a>
+                        </Link>
                     </div>
                     {/* EXTRA NAV */}
                     <div className="extra-nav d-md-flex d-none m-l15">
@@ -108,6 +133,7 @@ export default function Header() {
                             </div>
                             <div className="head-cate-menu browse-category-menu">
                                 <a
+                                    ref={categoryBtnRef}
                                     className="category-btn"
                                     onClick={toggleCategoryMenu}
                                     aria-expanded={isCategoryOpen}
@@ -124,7 +150,7 @@ export default function Header() {
                                 </a>
 
                                 {/* Drawer Menu */}
-                                <div className={`category-drawer ${isCategoryOpen ? 'open' : ''}`}>
+                                <div ref={drawerRef} className={`category-drawer ${isCategoryOpen ? 'open' : ''}`}>
                                     <div className="drawer-header">
                                         <h3>Browse Categories</h3>
                                         <button
@@ -137,101 +163,8 @@ export default function Header() {
 
                                     <div className="category-menu-items">
                                         <ul className="nav navbar-nav">
-                                            {/* Clothes Category with Mega Menu */}
-                                            <li className={`has-mega-menu cate-drop ${activeSubmenu === 0 ? 'open' : ''}`}>
-                                                <a
-                                                    href="#"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        toggleSubmenu(0);
-                                                    }}
-                                                >
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Clothes</span>
-                                                    <span className="menu-icon">
-                                                        <i className={`icon feather ${activeSubmenu === 0 ? 'icon-chevron-down' : 'icon-chevron-right'}`} />
-                                                    </span>
-                                                </a>
-                                                <div
-                                                    className="mega-menu"
-                                                    style={{ display: activeSubmenu === 0 ? 'block' : 'none' }}
-                                                >
-                                                    <div className="row">
-                                                        <div className="col-md-3 col-sm-4 col-6">
-                                                            <a href="#" className="menu-title">
-                                                                Smart Home Products
-                                                            </a>
-                                                            <ul>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Thermostats</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Lighting</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">
-                                                                        Security Systems
-                                                                        <span className="badge bg-primary">NEW</span>
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Locks</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Home Assistants</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">
-                                                                        Home Entertainment Systems
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Blinds And Shades</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Water Monitors</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="col-md-3 col-sm-4 col-6">
-                                                            <a href="shop-standard.html" className="menu-title">
-                                                                Smart Home Products
-                                                            </a>
-                                                            <ul>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Thermostats</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Lighting</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Security Systems</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Locks</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Home Assistants</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">
-                                                                        Home Entertainment Systems
-                                                                    </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Blinds And Shades</a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="shop-standard.html">Water Monitors</a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            {/* UrbanSkirt Category with Submenu */}
-                                            <li className={`cate-drop ${activeSubmenu === 1 ? 'open' : ''}`}>
+                                            {/* First Category with Mega Menu */}
+                                            <li className={`has-mega-menu cate-drop ${activeSubmenu === 1 ? 'open' : ''}`}>
                                                 <a
                                                     href="#"
                                                     onClick={(e) => {
@@ -240,100 +173,96 @@ export default function Header() {
                                                     }}
                                                 >
                                                     <i className="icon feather icon-arrow-right" />
-                                                    <span>UrbanSkirt</span>
+                                                    <span>Clothes</span>
                                                     <span className="menu-icon">
                                                         <i className={`icon feather ${activeSubmenu === 1 ? 'icon-chevron-down' : 'icon-chevron-right'}`} />
                                                     </span>
                                                 </a>
-                                                <ul
-                                                    className="sub-menu"
+                                                <div
+                                                    className="mega-menu"
                                                     style={{ display: activeSubmenu === 1 ? 'block' : 'none' }}
                                                 >
-                                                    <li>
-                                                        <a href="shop-standard.html">Thermostats</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="shop-standard.html">Lighting</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="shop-standard.html">Security Systems</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="shop-standard.html">Locks</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="shop-standard.html">Home Assistants</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="shop-standard.html">Entertainment Systems</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="shop-standard.html">Blinds And Shades</a>
-                                                    </li>
-                                                </ul>
+                                                    <div className="row">
+                                                        <div className="col-md-3 col-sm-4 col-6">
+                                                            <a href="#" className="menu-title">
+                                                                Men's Clothing
+                                                            </a>
+                                                            <ul>
+                                                                <li>
+                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
+                                                                        Shirts
+                                                                    </Link>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="col-md-3 col-sm-4 col-6">
+                                                            <a href="shop-standard.html" className="menu-title">
+                                                                Women's Clothing
+                                                            </a>
+                                                            <ul>
+                                                                <li>
+                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
+                                                                        Shirts
+                                                                    </Link>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </li>
 
-                                            {/* Other Categories */}
-                                            <li>
-                                                <a href="shop-standard.html">
+                                            {/* Second Category with Mega Menu */}
+                                            <li className={`has-mega-menu cate-drop ${activeSubmenu === 2 ? 'open' : ''}`}>
+                                                <a
+                                                    href="#"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        toggleSubmenu(2);
+                                                    }}
+                                                >
                                                     <i className="icon feather icon-arrow-right" />
-                                                    <span>VelvetGown</span>
+                                                    <span>Electronics</span>
+                                                    <span className="menu-icon">
+                                                        <i className={`icon feather ${activeSubmenu === 2 ? 'icon-chevron-down' : 'icon-chevron-right'}`} />
+                                                    </span>
                                                 </a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-standard.html">
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>LushShorts</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-standard.html">
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Vintage</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-standard.html">
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Wedding </span>
-                                                    <span className="badge bg-purple">SALE</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-standard.html">
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Cotton</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-standard.html">
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Linen</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-standard.html">
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Navy</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-standard.html">
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Urban</span>
-                                                </a>
-                                            </li>
-                                            <li className="menu-items">
-                                                <a href="#">
-                                                    <i className="flaticon-blocks me-3" />
-                                                    <span>More</span>
-                                                </a>
+                                                <div
+                                                    className="mega-menu"
+                                                    style={{ display: activeSubmenu === 2 ? 'block' : 'none' }}
+                                                >
+                                                    <div className="row">
+                                                        <div className="col-md-3 col-sm-4 col-6">
+                                                            <a href="#" className="menu-title">
+                                                                Smart Home Products
+                                                            </a>
+                                                            <ul>
+                                                                <li>
+                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
+                                                                        Shirts
+                                                                    </Link>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                        <div className="col-md-3 col-sm-4 col-6">
+                                                            <a href="shop-standard.html" className="menu-title">
+                                                                Computers
+                                                            </a>
+                                                            <ul>
+                                                                <li>
+                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
+                                                                        Shirts
+                                                                    </Link>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
-                            <ul className="nav navbar-nav">
+                            <ul className="nav navbar-nav other-nav">
                                 <li className="has-mega-menu sub-menu-down auto-width menu-left">
                                     <a href="javascript:void(0);">
                                         <span>Home</span>
@@ -1241,9 +1170,9 @@ export default function Header() {
                             <div className="extra-cell">
                                 <ul className="header-right">
                                     <li className="nav-item login-link">
-                                        <a className="nav-link" href="login.html">
+                                        <Link className="nav-link" href="/login">
                                             Login / Register
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="nav-item search-link">
                                         <a
