@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import Select from 'react-select';
 import React, { useState, useEffect, useRef } from 'react';
 
 
@@ -43,19 +44,19 @@ export default function page() {
             <div className="page-content">
                 {/*Banner Start*/}
                 <div
-                    className="dz-bnr-inr bg-secondary overlay-black-light"
+                    className="dz-bnr-inr"
                 >
                     <div className="container">
                         <div className="dz-bnr-inr-entry">
                             <h1>Shop Sidebar</h1>
-                            <nav aria-label="breadcrumb" className="breadcrumb-row">
+                            {/* <nav aria-label="breadcrumb" className="breadcrumb-row">
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item">
                                         <a href="index.html"> Home</a>
                                     </li>
                                     <li className="breadcrumb-item">Shop Sidebar</li>
                                 </ul>
-                            </nav>
+                            </nav> */}
                         </div>
                     </div>
                 </div>
@@ -118,7 +119,21 @@ export default function page() {
                                                                     <ul>
                                                                         {category.items.map((item, itemIndex) => (
                                                                             <li className="cat-item" key={itemIndex}>
-                                                                                <a href="blog-category.html">{item.name}</a> ({item.count})
+                                                                                <div className="form-group m-b5">
+                                                                                    <div className="custom-control custom-checkbox">
+                                                                                        <input
+                                                                                            type="checkbox"
+                                                                                            className="form-check-input"
+                                                                                            id={`basic_checkbox_${itemIndex}`}
+                                                                                        />
+                                                                                        <label
+                                                                                            className="form-check-label"
+                                                                                            htmlFor={`basic_checkbox_${itemIndex}`}
+                                                                                        >
+                                                                                            {item.name}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
                                                                             </li>
                                                                         ))}
                                                                     </ul>

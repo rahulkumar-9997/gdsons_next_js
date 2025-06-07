@@ -31579,7 +31579,7 @@ ul.grid-2 li {
 .wp-block-archives-list li,
 .wp-block-latest-posts li,
 .widget_categories ul li {
-  text-align: right;
+  text-align: left;
   display: table;
   width: 100%;
   padding: 0.625rem 0rem 0.625rem 1rem !important;
@@ -52574,9 +52574,9 @@ body .working-location img {
   border-left: 1px solid var(--border-color);
 }
 
-.filter-wrapper .filter-right-area>div:nth-child(3n-1) {
+/* .filter-wrapper .filter-right-area>div:nth-child(3n-1) {
   border-left: 0 !important;
-}
+} */
 
 @media only screen and (max-width: 767px) {
   .filter-wrapper .filter-right-area>div {
@@ -52587,7 +52587,7 @@ body .working-location img {
 .filter-wrapper .filter-right-area .form-group {
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 0px 10px 0px 10px;
   background: none;
 }
 
@@ -60309,9 +60309,9 @@ a {
 .browse-category-menu .category-menu-items {
   position: absolute;
   top: 60px;
-  left: 15px;
-  right: 15px;
-  width: 300px;
+  left: 0px;
+  right: 0px;
+  width: 100%;
   background-color: #fff;
   border-radius: 10px;
 }
@@ -63008,7 +63008,7 @@ a {
 }
 
 .dz-bnr-inr {
-  --dz-banner-height: 250px;
+  /* --dz-banner-height: 250px; */
   min-height: var(--dz-banner-height);
   background-size: cover;
   background-position: top;
@@ -63088,10 +63088,10 @@ a {
 }
 
 .dz-bnr-inr .dz-bnr-inr-entry {
-  height: var(--dz-banner-height);
+  /* height: var(--dz-banner-height); */
   vertical-align: middle;
   display: table-cell;
-  padding: 90px 0 90px 0;
+  padding: 10px 0 10px 0;
   text-align: center;
 }
 
@@ -63115,8 +63115,8 @@ a {
 
 .dz-bnr-inr h1,
 .dz-bnr-inr .h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
+  font-size: 23px;
+  margin-bottom: 0px;
   line-height: 1.3;
   color: var(--title);
   text-transform: capitalize;
@@ -64550,5 +64550,25 @@ footer.footer-dark .icon-bx-wraper {
     border: 1px solid #fab7b7;
     background-color: #f7f0f0;
     border-radius: 4px;
+}
+.filter-accordian label {
+    margin-top: 4px;
+    margin-left: 10px;
+}
+.filter-accordian input{
+  width: 20px;
+  height: 20px;
+}
+.widget_categories .filter-accordian ul li {
+    padding: 1px 0rem 1px 0 !important;
+}
+.filter-right-area .form-group{
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2)!important;
+  border-radius: 0.25rem;
+ 
+}
+.filter-right-area select {
+    height: 42px;
 }
 /*drawer menu*/

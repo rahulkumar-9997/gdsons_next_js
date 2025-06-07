@@ -4,8 +4,30 @@ import React, { useState, useEffect, useRef } from 'react';
 export default function Header() {
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
     const [activeSubmenu, setActiveSubmenu] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const drawerRef = useRef(null);
     const categoryBtnRef = useRef(null);
+
+    useEffect(() => {
+        const fetchMenuData = async () => {
+            try {
+                const response = await fetch('https://www.gdsons.co.in/api/menu');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch menu data');
+                }
+                const data = await response.json();
+                setCategories(data.data);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchMenuData();
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -32,10 +54,14 @@ export default function Header() {
     const toggleSubmenu = (index) => {
         setActiveSubmenu(activeSubmenu === index ? null : index);
     };
+
     const closeAllMenus = () => {
         setIsCategoryOpen(false);
         setActiveSubmenu(null);
     };
+
+    // if (loading) return <div>Loading menu...</div>;
+    // if (error) return <div>Error loading menu: {error}</div>;
 
     return (
         <header className="site-header mo-left header style-2">
@@ -163,111 +189,65 @@ export default function Header() {
 
                                     <div className="category-menu-items">
                                         <ul className="nav navbar-nav">
-                                            {/* First Category with Mega Menu */}
-                                            <li className={`has-mega-menu cate-drop ${activeSubmenu === 1 ? 'open' : ''}`}>
-                                                <a
-                                                    href="#"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        toggleSubmenu(1);
-                                                    }}
-                                                >
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Clothes</span>
-                                                    <span className="menu-icon">
-                                                        <i className={`icon feather ${activeSubmenu === 1 ? 'icon-chevron-down' : 'icon-chevron-right'}`} />
-                                                    </span>
-                                                </a>
-                                                <div
-                                                    className="mega-menu"
-                                                    style={{ display: activeSubmenu === 1 ? 'block' : 'none' }}
-                                                >
-                                                    <div className="row">
-                                                        <div className="col-md-3 col-sm-4 col-6">
-                                                            <a href="#" className="menu-title">
-                                                                Men's Clothing
-                                                            </a>
-                                                            <ul>
-                                                                <li>
-                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
-                                                                        Shirts
-                                                                    </Link>
-                                                                </li>
-                                                            </ul>
+                                            {categories.map((category, index) => (
+                                                <li key={category['category-slug']} className={`has-mega-menu cate-drop ${activeSubmenu === index ? 'open' : ''}`}>
+                                                    <a
+                                                        href="#"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            toggleSubmenu(index);
+                                                        }}
+                                                    >
+                                                        <i className="icon feather icon-arrow-right" />
+                                                        <span>{category.title}</span>
+                                                        <span className="menu-icon">
+                                                            <i className={`icon feather ${activeSubmenu === index ? 'icon-chevron-down' : 'icon-chevron-right'}`} />
+                                                        </span>
+                                                    </a>
+                                                    {category.attributes && category.attributes.length > 0 && (
+                                                        <div
+                                                            className="mega-menu"
+                                                            style={{ display: activeSubmenu === index ? 'block' : 'none' }}
+                                                        >
+                                                            <div className="row">
+                                                                {category.attributes.map((attribute, attrIndex) => (
+                                                                    <div key={attrIndex} className="col-md-3 col-sm-4 col-6">
+                                                                        <Link
+                                                                            href={`/categories/${category['category-slug']}?filter=${attribute.slug}`}
+                                                                            className="menu-title"
+                                                                            onClick={closeAllMenus}
+                                                                        >
+                                                                            {attribute.title}
+                                                                        </Link>
+                                                                        <ul>
+                                                                            {attribute.values.map((value, valueIndex) => (
+                                                                                <li key={valueIndex}>
+                                                                                    <Link
+                                                                                        href={`/kichen-catalog/${category['category-slug']}/${attribute.slug}/${value.slug}`}
+                                                                                        onClick={closeAllMenus}
+                                                                                    >
+                                                                                        {value.name}
+                                                                                    </Link>
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
                                                         </div>
-                                                        <div className="col-md-3 col-sm-4 col-6">
-                                                            <a href="shop-standard.html" className="menu-title">
-                                                                Women's Clothing
-                                                            </a>
-                                                            <ul>
-                                                                <li>
-                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
-                                                                        Shirts
-                                                                    </Link>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-
-                                            {/* Second Category with Mega Menu */}
-                                            <li className={`has-mega-menu cate-drop ${activeSubmenu === 2 ? 'open' : ''}`}>
-                                                <a
-                                                    href="#"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        toggleSubmenu(2);
-                                                    }}
-                                                >
-                                                    <i className="icon feather icon-arrow-right" />
-                                                    <span>Electronics</span>
-                                                    <span className="menu-icon">
-                                                        <i className={`icon feather ${activeSubmenu === 2 ? 'icon-chevron-down' : 'icon-chevron-right'}`} />
-                                                    </span>
-                                                </a>
-                                                <div
-                                                    className="mega-menu"
-                                                    style={{ display: activeSubmenu === 2 ? 'block' : 'none' }}
-                                                >
-                                                    <div className="row">
-                                                        <div className="col-md-3 col-sm-4 col-6">
-                                                            <a href="#" className="menu-title">
-                                                                Smart Home Products
-                                                            </a>
-                                                            <ul>
-                                                                <li>
-                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
-                                                                        Shirts
-                                                                    </Link>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                        <div className="col-md-3 col-sm-4 col-6">
-                                                            <a href="shop-standard.html" className="menu-title">
-                                                                Computers
-                                                            </a>
-                                                            <ul>
-                                                                <li>
-                                                                    <Link href="/kichen-catalog/" onClick={closeAllMenus}>
-                                                                        Shirts
-                                                                    </Link>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                                    )}
+                                                </li>
+                                            ))}
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <ul className="nav navbar-nav other-nav">
                                 <li className="has-mega-menu sub-menu-down auto-width menu-left">
-                                    <a href="javascript:void(0);">
+                                    <Link href="/">
                                         <span>Home</span>
                                         <i className="fas fa-chevron-down tabindex" />
-                                    </a>
+                                    </Link>
                                     <div className="mega-menu ">
                                         <ul className="demo-menu mb-0">
                                             <li>
