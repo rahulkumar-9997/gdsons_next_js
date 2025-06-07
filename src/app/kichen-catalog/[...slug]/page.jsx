@@ -1,44 +1,17 @@
-"use client";
-import Link from 'next/link';
-import Select from 'react-select';
-import React, { useState, useEffect, useRef } from 'react';
+// "use client";
+export default async function page({params}) {
+    const {slug} = await params;
+    // const [activeAccordion, setActiveAccordion] = useState(null);
+    // const [products, setProducts] = useState([]);
+    // const [category, setCategory] = useState({});
+    // const [filters, setFilters] = useState([]);
+    // const [loading, setLoading] = useState(true);
 
-
-export default function page() {
-    const [activeAccordion, setActiveAccordion] = useState(null);
-    const toggleAccordion = (index) => {
-        setActiveAccordion(activeAccordion === index ? null : index);
-    };
-    const categories = [
-        {
-            title: "Clothing",
-            items: [
-                { name: "Top & Blouses", count: 5 },
-                { name: "Jacket", count: 6 },
-                { name: "Coat", count: 22 }
-            ]
-        },
-        {
-            title: "Footwear",
-            items: [
-                { name: "Boots", count: 17 }
-            ]
-        },
-        {
-            title: "Accessories",
-            items: [
-                { name: "Jewelry", count: 13 }
-            ]
-        },
-        {
-            title: "Beauty",
-            items: [
-                { name: "Makeup", count: 6 },
-                { name: "Fragrances", count: 17 },
-                { name: "Shaving & Grooming", count: 13 }
-            ]
-        }
-    ];
+    // Extract dynamic parameters from URL
+    console.log(slug);
+    
+    //alert(categorySlug);
+    //  
     return (
         <>
             <div className="page-content">
@@ -48,7 +21,7 @@ export default function page() {
                 >
                     <div className="container">
                         <div className="dz-bnr-inr-entry">
-                            <h1>Shop Sidebar</h1>
+                            {/*     <h1>{category?.title} - {primaryVal}</h1> */}
                             {/* <nav aria-label="breadcrumb" className="breadcrumb-row">
                                 <ul className="breadcrumb">
                                     <li className="breadcrumb-item">
@@ -98,51 +71,51 @@ export default function page() {
                                                     Filter
                                                 </h6>
                                             </div>
-                                            <div className="widget widget_categories">
-                                                <div className="accordion dz-accordion accordion-sm filter-accordian" id="categoryAccordion">
-                                                    {categories.map((category, index) => (
-                                                        <div className="accordion-item" key={index}>
-                                                            <h2 className="accordion-header">
-                                                                <a
-                                                                    className={`accordion-button ${activeAccordion === index ? '' : 'collapsed'}`}
-                                                                    type="button"
-                                                                    onClick={() => toggleAccordion(index)}
+                                            {/* {filters.length > 0 && (
+                                                <div className="widget widget_categories">
+                                                    <div className="accordion dz-accordion accordion-sm filter-accordian" id="categoryAccordion">
+                                                        {filters.map((filter, index) => (
+                                                            <div className="accordion-item" key={index}>
+                                                                <h2 className="accordion-header">
+                                                                    <button
+                                                                        className={`accordion-button ${activeAccordion === index ? '' : 'collapsed'}`}
+                                                                        type="button"
+                                                                        onClick={() => toggleAccordion(index)}
+                                                                    >
+                                                                        {filter.title}
+                                                                        <span className="toggle-close"></span>
+                                                                    </button>
+                                                                </h2>
+                                                                <div
+                                                                    className={`accordion-collapse collapse ${activeAccordion === index ? 'show' : ''}`}
                                                                 >
-                                                                    {category.title}
-                                                                    <span className="toggle-close"></span>
-                                                                </a>
-                                                            </h2>
-                                                            <div
-                                                                className={`accordion-collapse collapse ${activeAccordion === index ? 'show' : ''}`}
-                                                            >
-                                                                <div className="accordion-body">
-                                                                    <ul>
-                                                                        {category.items.map((item, itemIndex) => (
-                                                                            <li className="cat-item" key={itemIndex}>
-                                                                                <div className="form-group m-b5">
-                                                                                    <div className="custom-control custom-checkbox">
+                                                                    <div className="accordion-body">
+                                                                        <ul>
+                                                                            {filter.values?.map((value, valueIndex) => (
+                                                                                <li className="cat-item" key={valueIndex}>
+                                                                                    <div className="form-check">
                                                                                         <input
                                                                                             type="checkbox"
                                                                                             className="form-check-input"
-                                                                                            id={`basic_checkbox_${itemIndex}`}
+                                                                                            id={`filter_${index}_${valueIndex}`}
                                                                                         />
                                                                                         <label
                                                                                             className="form-check-label"
-                                                                                            htmlFor={`basic_checkbox_${itemIndex}`}
+                                                                                            htmlFor={`filter_${index}_${valueIndex}`}
                                                                                         >
-                                                                                            {item.name}
+                                                                                            {value.name}
                                                                                         </label>
                                                                                     </div>
-                                                                                </div>
-                                                                            </li>
-                                                                        ))}
-                                                                    </ul>
+                                                                                </li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    ))}
+                                                        ))}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )} */}
                                         </aside>
                                     </div>
                                 </div>
