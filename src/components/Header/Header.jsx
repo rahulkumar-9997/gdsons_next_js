@@ -1,68 +1,27 @@
-"use client";
+'use client';
+
 import Link from 'next/link';
-import React, { useState, useEffect, useRef } from 'react';
-export default function Header() {
-    const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-    const [activeSubmenu, setActiveSubmenu] = useState(null);
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const drawerRef = useRef(null);
-    const categoryBtnRef = useRef(null);
+import { useState, useRef } from 'react';
 
-    useEffect(() => {
-        const fetchMenuData = async () => {
-            try {
-                const response = await fetch('https://www.gdsons.co.in/api/menu');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch menu data');
-                }
-                const data = await response.json();
-                setCategories(data.data);
-                setLoading(false);
-            } catch (err) {
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+export default function Header({ initialCategories = [] }) {
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [activeSubmenu, setActiveSubmenu] = useState(null);
+  const categories = initialCategories; 
+  const drawerRef = useRef(null);
+  const categoryBtnRef = useRef(null);
+  const toggleCategoryMenu = () => {
+    setIsCategoryOpen(!isCategoryOpen);
+    if (isCategoryOpen) setActiveSubmenu(null);
+  };
 
-        fetchMenuData();
-    }, []);
+  const toggleSubmenu = (index) => {
+    setActiveSubmenu(activeSubmenu === index ? null : index);
+  };
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (drawerRef.current && !drawerRef.current.contains(event.target) &&
-                categoryBtnRef.current && !categoryBtnRef.current.contains(event.target)) {
-                setIsCategoryOpen(false);
-                setActiveSubmenu(null);
-            }
-        };
-
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const toggleCategoryMenu = () => {
-        setIsCategoryOpen(!isCategoryOpen);
-        if (isCategoryOpen) {
-            setActiveSubmenu(null);
-        }
-    };
-
-    const toggleSubmenu = (index) => {
-        setActiveSubmenu(activeSubmenu === index ? null : index);
-    };
-
-    const closeAllMenus = () => {
-        setIsCategoryOpen(false);
-        setActiveSubmenu(null);
-    };
-
-    // if (loading) return <div>Loading menu...</div>;
-    // if (error) return <div>Error loading menu: {error}</div>;
-
+  const closeAllMenus = () => {
+    setIsCategoryOpen(false);
+    setActiveSubmenu(null);
+  };
     return (
         <header className="site-header mo-left header style-2">
             {/* Main Header */}

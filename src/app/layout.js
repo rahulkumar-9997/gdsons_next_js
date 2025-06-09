@@ -1,4 +1,4 @@
-import Header from "@/components/Header/Header";
+import HeaderWrapper from '@/components/Header/HeaderWrapper';
 import Footer from "@/components/Footer/Footer";
 export const metadata = {
   title: "Create Next App",
@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <div className="page-wraper">
-          <Header />
+          <HeaderWrapper />
           {children}
           <Footer />
         </div>
