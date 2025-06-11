@@ -1,6 +1,6 @@
 // "use client";
 export default async function page({params}) {
-    const { slug } = params;
+    const { slug } = await params;
     const pathSegments = slug.join('/');
     const apiUrl = `https://www.gdsons.co.in/api/catalog/${pathSegments}`;
     try {
