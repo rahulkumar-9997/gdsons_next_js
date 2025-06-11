@@ -16,9 +16,9 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css"/>
         <link rel="stylesheet" type="text/css" href="/assets/vendor/swiper/swiper-bundle.min.css"/>
         <link rel="stylesheet" type="text/css" href="/assets/vendor/animate/animate.css"/>
-        <link rel="stylesheet" type="text/css" href="vendor/lightgallery/dist/css/lightgallery.css"/>
-        <link rel="stylesheet" type="text/css" href="/assets/vendor/lightgallery/dist/css/lg-thumbnail.css"/>
-        <link rel="stylesheet" type="text/css" href="/assets/vendor/lightgallery/dist/css/lg-zoom.css"/>
+        {/* <link rel="stylesheet" type="text/css" href="vendor/lightgallery/dist/css/lightgallery.css"/> */}
+        {/* <link rel="stylesheet" type="text/css" href="/assets/vendor/lightgallery/dist/css/lg-thumbnail.css"/>
+        <link rel="stylesheet" type="text/css" href="/assets/vendor/lightgallery/dist/css/lg-zoom.css"/> */}
         <link rel="stylesheet" type="text/css" href="/assets/css/style.css"/>
         <link type="text/css" rel="stylesheet" href="/assets/css/skin/skin-1.css"/>
         

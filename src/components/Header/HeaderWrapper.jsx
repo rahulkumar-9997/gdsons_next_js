@@ -4,7 +4,8 @@ import Header from './Header';
 async function getMenuData() {
   try {
     const res = await fetch('https://www.gdsons.co.in/api/menu', {
-      cache: 'no-store',
+      // cache: 'no-store',
+      next: { revalidate: 3600 },
       headers: {
          'Content-Type': 'application/json',
       },

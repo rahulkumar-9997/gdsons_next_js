@@ -14,7 +14,7 @@ export default function Footer() {
                             <div className="widget widget_about me-2">
                                 <div className="footer-logo logo-dark">
                                     <a href="index.html">
-                                        <img src="images/logo.svg" alt="" />
+                                        <img src="assets/images/logo.svg" alt="" />
                                     </a>
                                 </div>
                                 <ul className="widget-address">
@@ -78,7 +78,7 @@ export default function Footer() {
                                 <ul>
                                     <li>
                                         <div className="dz-media">
-                                            <img src="images/shop/product/small/1.png" alt="" />
+                                            <img src="assets/images/shop/product/small/1.png" alt="" />
                                         </div>
                                         <div className="dz-content">
                                             <h6 className="name">
@@ -91,7 +91,7 @@ export default function Footer() {
                                     </li>
                                     <li>
                                         <div className="dz-media">
-                                            <img src="images/shop/product/small/2.png" alt="" />
+                                            <img src="assets/images/shop/product/small/2.png" alt="" />
                                         </div>
                                         <div className="dz-content">
                                             <h6 className="name">
@@ -104,7 +104,7 @@ export default function Footer() {
                                     </li>
                                     <li>
                                         <div className="dz-media">
-                                            <img src="images/shop/product/small/3.png" alt="" />
+                                            <img src="assets/images/shop/product/small/3.png" alt="" />
                                         </div>
                                         <div className="dz-content">
                                             <h6 className="name">
@@ -217,7 +217,7 @@ export default function Footer() {
                         <div className="col-lg-6 col-md-12 text-end">
                             <div className="d-flex align-items-center justify-content-center justify-content-md-center justify-content-xl-end">
                                 <span className="me-3">We Accept: </span>
-                                <img src="images/footer-img.png" alt="" />
+                                <img src="assets/images/footer-img.png" alt="" />
                             </div>
                         </div>
                     </div>
