@@ -1,19 +1,113 @@
 'use client';
 
 import Image from "next/image";
-import { useState } from "react";
-export default function Api({ data }) {
-  if (!data) return <div>No data found</div>;
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+
+export default function Api({ data, searchParams }) {
+  const router = useRouter();
+  const params = useSearchParams();
   const [activeAccordion, setActiveAccordion] = useState(null);
+  const [selectedFilters, setSelectedFilters] = useState({});
+  
+  // Initialize selected filters from URL params
+  useEffect(() => {
+    const filters = {};
+    for (const [key, value] of params.entries()) {
+      if (key !== 'sort' && key !== 'page') {
+        filters[key] = value.split(',');
+      }
+    }
+    setSelectedFilters(filters);
+  }, [params]);
+
   const toggleAccordion = (index) => {
     setActiveAccordion(activeAccordion === index ? null : index);
   };
-  const categoryTitle = data?.category?.title || 'Category';
-  const primaryAttr = data?.primary_attribute?.title || 'Attribute';
-  const primaryValue = data?.primary_value?.name || 'Value';
+
+  const handleFilterChange = (attributeSlug, valueSlug, isChecked) => {
+    const newFilters = { ...selectedFilters };
+    
+    if (isChecked) {
+      // Add filter
+      if (newFilters[attributeSlug]) {
+        if (!newFilters[attributeSlug].includes(valueSlug)) {
+          newFilters[attributeSlug] = [...newFilters[attributeSlug], valueSlug];
+        }
+      } else {
+        newFilters[attributeSlug] = [valueSlug];
+      }
+    } else {
+      // Remove filter
+      if (newFilters[attributeSlug]) {
+        newFilters[attributeSlug] = newFilters[attributeSlug].filter(v => v !== valueSlug);
+        if (newFilters[attributeSlug].length === 0) {
+          delete newFilters[attributeSlug];
+        }
+      }
+    }
+    
+    // Update URL with filter=1 always first
+    const query = new URLSearchParams();
+    if (Object.keys(newFilters).length > 0) {
+      query.set('filter', '1');
+    }
+    
+      Object.keys(newFilters).forEach(key => {
+      query.set(key, newFilters[key].join(','));
+    });
+    
+    // Preserve sort if exists
+    if (searchParams.sort) {
+      query.set('sort', searchParams.sort);
+    }
+    
+    router.push(`?${query.toString()}`, { scroll: false });
+  };
+
+  const removeFilterTag = (attributeSlug, valueSlug) => {
+    handleFilterChange(attributeSlug, valueSlug, false);
+  };
+
+  const handleSortChange = (e) => {
+    const sortValue = e.target.value;
+    const query = new URLSearchParams(params.toString());
+    
+    if (sortValue) {
+      query.set('sort', sortValue);
+    } else {
+      query.delete('sort');
+    }
+    
+    router.push(`?${query.toString()}`, { scroll: false });
+  };
+
+  const category = data?.category?.title || 'Category';
+  const attributes = data?.primary_attribute?.title || 'Attribute';
+  const attributesValue = data?.primary_value?.name || 'Value';
   const filterAttrs = Array.isArray(data?.filter_attributes) ? data.filter_attributes : [];
   const products = Array.isArray(data?.products) ? data.products : [];
-
+  const pagination = data?.pagination || {};
+  console.log(category);
+  // Get all selected filter values for display
+  const activeFilters = [];
+  Object.keys(selectedFilters).forEach(attrSlug => {
+    const attribute = filterAttrs.find(attr => attr.slug === attrSlug);
+    if (attribute) {
+      selectedFilters[attrSlug].forEach(valueSlug => {
+        const value = attribute.attributes_values.find(val => val.slug === valueSlug);
+        if (value) {
+          activeFilters.push({
+            attributeSlug: attrSlug,
+            attributeTitle: attribute.title,
+            valueSlug: valueSlug,
+            valueName: value.name
+          });
+        }
+      });
+    }
+  });
   return (
     <>
       <div className="page-content">
@@ -23,15 +117,15 @@ export default function Api({ data }) {
         >
           <div className="container">
             <div className="dz-bnr-inr-entry">
-              {/*     <h1>{category?.title} - {primaryVal}</h1> */}
-              {/* <nav aria-label="breadcrumb" className="breadcrumb-row">
-                                    <ul className="breadcrumb">
-                                        <li className="breadcrumb-item">
-                                            <a href="index.html"> Home</a>
-                                        </li>
-                                        <li className="breadcrumb-item">Shop Sidebar</li>
-                                    </ul>
-                                </nav> */}
+                  <h1>{category} - {attributesValue}</h1>
+                  {/* <nav aria-label="breadcrumb" className="breadcrumb-row">
+                      <ul className="breadcrumb">
+                          <li className="breadcrumb-item">
+                              <a href="index.html"> Home</a>
+                          </li>
+                          <li className="breadcrumb-item">Shop Sidebar</li>
+                      </ul>
+                </nav> */}
             </div>
           </div>
         </div>
@@ -93,24 +187,28 @@ export default function Api({ data }) {
                                 >
                                   <div className="accordion-body">
                                     <ul>
-                                      {filter.attributes_values?.map((value, valueIndex) => (
-                                        <li className="cat-item" key={valueIndex}>
-                                          <div className="form-check">
-                                            <input
-                                              type="checkbox"
-                                              className="form-check-input"
-                                              id={`filter_${index}_${valueIndex}`}
-                                              
-                                            />
-                                            <label
-                                              className="form-check-label"
-                                              htmlFor={`filter_${index}_${valueIndex}`}
-                                            >
-                                              {value.name}
-                                            </label>
-                                          </div>
-                                        </li>
-                                      ))}
+                                      {filter.attributes_values?.map((value, valueIndex) => {
+                                        const isChecked = selectedFilters[filter.slug]?.includes(value.slug) || false;
+                                        return (
+                                          <li className="cat-item" key={valueIndex}>
+                                            <div className="form-check">
+                                              <input
+                                                type="checkbox"
+                                                className="form-check-input"
+                                                id={`filter_${index}_${valueIndex}`}
+                                                checked={isChecked}
+                                                onChange={(e) => handleFilterChange(filter.slug, value.slug, e.target.checked)}
+                                              />
+                                              <label
+                                                className="form-check-label"
+                                                htmlFor={`filter_${index}_${valueIndex}`}
+                                              >
+                                                {value.name} ({value.product_attributes_values_count})
+                                              </label>
+                                            </div>
+                                          </li>
+                                        );
+                                      })}
                                     </ul>
                                   </div>
                                 </div>
@@ -127,18 +225,17 @@ export default function Api({ data }) {
                 <div className="filter-wrapper">
                   <div className="filter-left-area">
                     <ul className="filter-tag">
-                      <li>
-                        <a href="javascript:void(0);" className="tag-btn">
-                          Dresses
-                          <i className="icon feather icon-x tag-close" />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0);" className="tag-btn">
-                          Tops
-                          <i className="icon feather icon-x tag-close" />
-                        </a>
-                      </li>
+                      {activeFilters.map((filter, index) => (
+                        <li key={index}>
+                          <button className="tag-btn">
+                            {filter.valueName}
+                            <i 
+                              className="icon feather icon-x tag-close" 
+                              onClick={() => removeFilterTag(filter.attributeSlug, filter.valueSlug)}
+                            />
+                          </button>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                   <div className="filter-right-area">
@@ -159,13 +256,15 @@ export default function Api({ data }) {
                       Filter
                     </a>
                     <div className="form-group">
-                      <select className="default-select">
-                        <option>Latest</option>
-                        <option>Popularity</option>
-                        <option>Average rating</option>
-                        <option>Latest</option>
-                        <option>Low to high</option>
-                        <option>high to Low</option>
+                      <select 
+                        className="default-select" 
+                        value={searchParams.sort || 'new-arrivals'}
+                        onChange={handleSortChange}
+                      >
+                        <option value="new-arrivals">Latest</option>
+                        <option value="price-low-to-high">Price: Low to High</option>
+                        <option value="price-high-to-low">Price: High to Low</option>
+                        <option value="a-to-z-order">A to Z Order</option>
                       </select>
                     </div>
 
@@ -257,27 +356,21 @@ export default function Api({ data }) {
                   <div className="col-md-6">
                     <nav aria-label="Blog Pagination">
                       <ul className="pagination style-1">
-                        <li className="page-item">
-                          <a className="page-link active" href="javascript:void(0);">
-                            1
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="javascript:void(0);">
-                            2
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link" href="javascript:void(0);">
-                            3
-                          </a>
-                        </li>
-                        <li className="page-item">
-                          <a className="page-link next" href="javascript:void(0);">
-                            Next
-                          </a>
-                        </li>
-                      </ul>
+                          {Array.from({ length: pagination.last_page }, (_, i) => i + 1).map(page => (
+                            <li className="page-item" key={page}>
+                              <Link 
+                                href={`?${new URLSearchParams({
+                                  ...selectedFilters,
+                                  sort: searchParams.sort || 'new-arrivals',
+                                  page: page.toString()
+                                }).toString()}`}
+                                className={`page-link ${pagination.current_page === page ? 'active' : ''}`}
+                              >
+                                {page}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
                     </nav>
                   </div>
                 </div>
