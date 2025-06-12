@@ -1,9 +1,13 @@
 'use client';
 
 import Image from "next/image";
+import { useState } from "react";
 export default function Api({ data }) {
   if (!data) return <div>No data found</div>;
-
+  const [activeAccordion, setActiveAccordion] = useState(null);
+  const toggleAccordion = (index) => {
+    setActiveAccordion(activeAccordion === index ? null : index);
+  };
   const categoryTitle = data?.category?.title || 'Category';
   const primaryAttr = data?.primary_attribute?.title || 'Attribute';
   const primaryValue = data?.primary_value?.name || 'Value';
@@ -69,51 +73,52 @@ export default function Api({ data }) {
                           Filter
                         </h6>
                       </div>
-                      {/* {filters.length > 0 && (
-                                                    <div className="widget widget_categories">
-                                                        <div className="accordion dz-accordion accordion-sm filter-accordian" id="categoryAccordion">
-                                                            {filters.map((filter, index) => (
-                                                                <div className="accordion-item" key={index}>
-                                                                    <h2 className="accordion-header">
-                                                                        <button
-                                                                            className={`accordion-button ${activeAccordion === index ? '' : 'collapsed'}`}
-                                                                            type="button"
-                                                                            onClick={() => toggleAccordion(index)}
-                                                                        >
-                                                                            {filter.title}
-                                                                            <span className="toggle-close"></span>
-                                                                        </button>
-                                                                    </h2>
-                                                                    <div
-                                                                        className={`accordion-collapse collapse ${activeAccordion === index ? 'show' : ''}`}
-                                                                    >
-                                                                        <div className="accordion-body">
-                                                                            <ul>
-                                                                                {filter.values?.map((value, valueIndex) => (
-                                                                                    <li className="cat-item" key={valueIndex}>
-                                                                                        <div className="form-check">
-                                                                                            <input
-                                                                                                type="checkbox"
-                                                                                                className="form-check-input"
-                                                                                                id={`filter_${index}_${valueIndex}`}
-                                                                                            />
-                                                                                            <label
-                                                                                                className="form-check-label"
-                                                                                                htmlFor={`filter_${index}_${valueIndex}`}
-                                                                                            >
-                                                                                                {value.name}
-                                                                                            </label>
-                                                                                        </div>
-                                                                                    </li>
-                                                                                ))}
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                )} */}
+                      {filterAttrs.length > 0 && (
+                        <div className="widget widget_categories">
+                          <div className="accordion dz-accordion accordion-sm filter-accordian" id="categoryAccordion">
+                            {filterAttrs.map((filter, index) => (
+                              <div className="accordion-item" key={index}>
+                                <h2 className="accordion-header">
+                                  <button
+                                    className={`accordion-button ${activeAccordion === index ? '' : 'collapsed'}`}
+                                    type="button"
+                                    onClick={() => toggleAccordion(index)}
+                                  >
+                                    {filter.title}
+                                    <span className="toggle-close"></span>
+                                  </button>
+                                </h2>
+                                <div
+                                  className={`accordion-collapse collapse ${activeAccordion === index ? 'show' : ''}`}
+                                >
+                                  <div className="accordion-body">
+                                    <ul>
+                                      {filter.attributes_values?.map((value, valueIndex) => (
+                                        <li className="cat-item" key={valueIndex}>
+                                          <div className="form-check">
+                                            <input
+                                              type="checkbox"
+                                              className="form-check-input"
+                                              id={`filter_${index}_${valueIndex}`}
+                                              
+                                            />
+                                            <label
+                                              className="form-check-label"
+                                              htmlFor={`filter_${index}_${valueIndex}`}
+                                            >
+                                              {value.name}
+                                            </label>
+                                          </div>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </aside>
                   </div>
                 </div>
